@@ -59,6 +59,34 @@ class OAuthClientTest extends TestCase
         $this->model->sendMessage($message);
     }
 
+    public function testSendBlocksSuccess(): void
+    {
+        $token = 'xoxb-test-token';
+        $channel = 'C12345';
+        $blocks = [['type' => 'section', 'text' => ['type' => 'mrkdwn', 'text' => 'Hello']]];
+
+        $this->configMock->expects($this->once())
+            ->method('getToken')
+            ->willReturn($token);
+        $this->configMock->expects($this->once())
+            ->method('getChannel')
+            ->willReturn($channel);
+
+        $this->clientFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($token)
+            ->willReturn($this->slackClientMock);
+
+        $this->slackClientMock->expects($this->once())
+            ->method('__call')
+            ->with('chatPostMessage', [[
+                'channel' => $channel,
+                'blocks' => json_encode($blocks),
+            ]]);
+
+        $this->model->sendBlocks($blocks);
+    }
+
     public function testSendMessageThrowsExceptionIfTokenMissing(): void
     {
         $this->configMock->expects($this->once())

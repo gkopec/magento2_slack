@@ -64,6 +64,39 @@ class WebhookClientTest extends TestCase
         $this->model->sendMessage($message);
     }
 
+    public function testSendBlocksSuccess(): void
+    {
+        $url = 'https://hooks.slack.com/services/T000/B000/XXX';
+        $channel = '#general';
+        $blocks = [['type' => 'section', 'text' => ['type' => 'mrkdwn', 'text' => 'Hello']]];
+        $payload = ['blocks' => $blocks, 'channel' => $channel];
+        $serializedPayload = '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hello"}}],"channel":"#general"}';
+
+        $this->configMock->expects($this->once())
+            ->method('getWebhookUrl')
+            ->willReturn($url);
+        $this->configMock->expects($this->once())
+            ->method('getChannel')
+            ->willReturn($channel);
+
+        $this->jsonMock->expects($this->once())
+            ->method('serialize')
+            ->with($payload)
+            ->willReturn($serializedPayload);
+
+        $this->curlMock->expects($this->once())
+            ->method('addHeader')
+            ->with('Content-Type', 'application/json');
+        $this->curlMock->expects($this->once())
+            ->method('post')
+            ->with($url, $serializedPayload);
+        $this->curlMock->expects($this->once())
+            ->method('getStatus')
+            ->willReturn(200);
+
+        $this->model->sendBlocks($blocks);
+    }
+
     public function testSendMessageThrowsExceptionIfUrlMissing(): void
     {
         $this->configMock->expects($this->once())

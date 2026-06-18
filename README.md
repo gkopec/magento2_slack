@@ -44,11 +44,73 @@ class YourClass
     {
         try {
             $client = $this->slackClientProvider->getClient();
+            
+            // Simple text message
             $client->sendMessage('Hello from Magento 2!');
+            
+            // Complex message with Blocks
+            $client->sendBlocks([
+                [
+                    'type' => 'section',
+                    'text' => [
+                        'type' => 'mrkdwn',
+                        'text' => '*New order received!* \n <https://example.com|View Order>'
+                    ]
+                ]
+            ]);
         } catch (LocalizedException $e) {
             // Handle error (e.g., module not configured)
         }
     }
+}
+```
+
+### Table Support
+
+You can easily generate Slack table blocks using `GeniusDev\Slack\Model\Slack\Block\Table`.
+
+```php
+use GeniusDev\Slack\Model\Slack\Block\Table as TableBlock;
+
+// ...
+
+public function __construct(
+    private SlackClientProvider $slackClientProvider,
+    private TableBlock $tableBlock
+) {}
+
+public function sendTable()
+{
+    $headers = ['Order ID', 'Customer'];
+    $rows = [
+        ['#10001', 'John Doe'],
+        ['#10002', 'Jane Smith']
+    ];
+    
+    $table = $this->tableBlock->create($headers, $rows);
+    
+    $this->slackClientProvider->getClient()->sendBlocks([$table]);
+}
+
+### Header Support
+
+You can create header blocks using `GeniusDev\Slack\Model\Slack\Block\Header`.
+
+```php
+use GeniusDev\Slack\Model\Slack\Block\Header as HeaderBlock;
+
+// ...
+
+public function __construct(
+    private SlackClientProvider $slackClientProvider,
+    private HeaderBlock $headerBlock
+) {}
+
+public function sendWithHeader()
+{
+    $header = $this->headerBlock->create('A Heartfelt Header');
+    
+    $this->slackClientProvider->getClient()->sendBlocks([$header]);
 }
 ```
 
