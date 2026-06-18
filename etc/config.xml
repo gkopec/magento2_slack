@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/config.xsd">
+    <default>
+        <geniusdev_slack>
+            <general>
+                <communication_option>oauth</communication_option>
+            </general>
+        </geniusdev_slack>
+    </default>
+</config>

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="geniusdev" translate="label" sortOrder="100">
+            <label>GeniusDev</label>
+        </tab>
+        <section id="geniusdev_slack" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Slack</label>
+            <tab>geniusdev</tab>
+            <resource>GeniusDev_Slack::config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Configuration</label>
+                <field id="communication_option" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Communication Option</label>
+                    <source_model>GeniusDev\Slack\Model\Config\Source\CommunicationOption</source_model>
+                </field>
+                <field id="channel" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Channel</label>
+                </field>
+                <field id="token" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Bot User OAuth Token</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="communication_option">oauth</field>
+                    </depends>
+                </field>
+                <field id="webhook_url" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Webhook URL</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="communication_option">webhook</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
