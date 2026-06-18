@@ -1,5 +1,5 @@
 {
-    "name": "geniusdev/slack",
+    "name": "geniusdev/magento2_slack",
     "description": "Slack integration for Magento 2",
     "type": "magento2-module",
     "license": "OSL-3.0",
